@@ -1,16 +1,16 @@
-SELECT
-    *
+SELECT 
+   *
 FROM
     crosstab (
-        $$SELECT "idВалюта1", "idВалюта2", "Значение курса"
+        $$SELECT "Название валюты", "idВалюта2", "Значение курса" FROM mydb."Валюта"
+   LEFT JOIN (SELECT *
    FROM mydb."Курс валюты"
-   WHERE  "Дата" = '2024-04-20'
-   order by 1,2$$,
+   WHERE "Дата" = CURRENT_DATE) AS t1
+   ON "idВалюта" = "idВалюта1"$$,
         $$SELECT "idВалюта" FROM mydb."Валюта"$$
     ) AS ct (
-        "idВалюта1" int,
-        "0" numeric,
-        "1" numeric,
-        "2" numeric,
-        "3" numeric
+        "Название валюты" text,
+        "Криптодоллар" numeric,
+        "Биткойн" numeric,
+        "Эфириум" numeric
     )
