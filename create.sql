@@ -6,8 +6,8 @@ CREATE SCHEMA IF NOT EXISTS "mydb";
 -- -----------------------------------------------------
 -- Table "mydb"."Участник форума"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Участник форума" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Участник форума" (
         "idУчастник" INT NOT NULL,
         "Никнейм" VARCHAR(20) NOT NULL,
         "Пароль" VARCHAR(45) NOT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Роль участника"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Роль участника" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Роль участника" (
         "Код роли участника" INT NOT NULL CHECK (
             "Код роли участника" >= 0
             AND "Код роли участника" <= 3
@@ -33,8 +33,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Участники_Роли"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Участники_Роли" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Участники_Роли" (
         "idУчастник" INT NOT NULL,
         "Код роли участника" INT NOT NULL CHECK (
             "Код роли участника" >= 0
@@ -48,8 +48,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Товар"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Товар" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Товар" (
         "Артикул" INT NOT NULL,
         "Упаковка" VARCHAR(200) NOT NULL,
         "Краткое описание" VARCHAR(500) NOT NULL,
@@ -59,8 +59,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Предложение"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Предложение" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Предложение" (
         "id_Предложения" INT NOT NULL,
         "Артикул" INT NOT NULL,
         "idПродавец" INT NOT NULL,
@@ -74,8 +74,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Валюта"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Валюта" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Валюта" (
         "idВалюта" INT NOT NULL,
         "Название валюты" VARCHAR(45) NOT NULL,
         "Описание валюты" VARCHAR(500) NULL,
@@ -85,8 +85,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Цена товара"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Цена товара" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Цена товара" (
         "id_Цена_товара" INT NOT NULL,
         "id_Предложения" INT NOT NULL,
         "id_Валюта" INT NOT NULL,
@@ -101,8 +101,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Статусы заказов"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Статусы заказов" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Статусы заказов" (
         "Код статуса заказа" INT NOT NULL CHECK (
             "Код статуса заказа" >= 0
             AND "Код статуса заказа" <= 5
@@ -114,8 +114,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Заказ"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Заказ" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Заказ" (
         "id_Заказ" INT NOT NULL,
         "idПокупатель" INT NOT NULL,
         "Валюта заказа" INT NOT NULL,
@@ -129,8 +129,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Документ об оплате"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Документ об оплате" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Документ об оплате" (
         "idДокумент об оплате" INT NOT NULL,
         "id_Заказ" INT NOT NULL,
         "id_Валюта" INT NOT NULL,
@@ -146,8 +146,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Отказ"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Отказ" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Отказ" (
         "idОтказ" SERIAL NOT NULL,
         "Номер заказа" INT NOT NULL,
         "Причина отказа" VARCHAR(500) NOT NULL,
@@ -158,8 +158,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Курс валюты"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Курс валюты" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Курс валюты" (
         "idВалюта1" INT NOT NULL,
         "idВалюта2" INT NOT NULL,
         "Дата" DATE NOT NULL,
@@ -172,20 +172,23 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Трекинг посылки"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Трекинг посылки" (
-        "Трек-номер" INT NOT NULL,
-        "Адрес" VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Трекинг посылки" (
+        "id_Трек" SERIAL NOT NULL,
+        "id_Заказ" INT NOT NULL,
+        "Адрес" TEXT NOT NULL,
         "Дата" DATE NOT NULL,
+        "Последний пункт" BOOLEAN NOT NULL,
         "Номер пункта" INT NOT NULL,
-        PRIMARY KEY ("Трек-номер")
+        PRIMARY KEY ("id_Трек"),
+        CONSTRAINT "fk_Трекинг посылки" FOREIGN KEY ("id_Заказ") REFERENCES "mydb"."Заказ" ("id_Заказ") ON DELETE NO ACTION ON UPDATE NO ACTION
     );
 
 -- -----------------------------------------------------
 -- Table "mydb"."Список товаров в заказе"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Список товаров в заказе" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Список товаров в заказе" (
         "id_Заказ" INT NOT NULL,
         "id_Товар" INT NOT NULL,
         "Количество" INT NOT NULL,
@@ -197,8 +200,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Отзыв о товаре"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Отзыв о товаре" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Отзыв о товаре" (
         "idОтзыв о товаре" INT NOT NULL,
         "id_Товар" INT NOT NULL,
         "id_Заказ" INT NOT NULL,
@@ -217,8 +220,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Список отказов"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Список отказов" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Список отказов" (
         "id_Списка_отказов" INT NOT NULL,
         "idОтказ" INT NOT NULL,
         "id_Товар" INT NOT NULL,
@@ -231,8 +234,8 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Список оплаченных товаров"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Список оплаченных товаров" (
+CREATE TABLE IF NOT EXISTS
+    "mydb"."Список оплаченных товаров" (
         "id_Списка_оплаты" INT NOT NULL,
         "idДокумент об оплате" INT NULL,
         "id_Товар" INT NULL,
@@ -245,11 +248,11 @@ CREATE TABLE
 -- -----------------------------------------------------
 -- Table "mydb"."Треки_заказы"
 -- -----------------------------------------------------
-CREATE TABLE
-    IF NOT EXISTS "mydb"."Треки_заказы" (
-        "Трек-номер" INT NOT NULL,
-        "id_Заказ" INT NULL,
-        PRIMARY KEY ("Трек-номер"),
-        CONSTRAINT "fk_Треки_заказы_1" FOREIGN KEY ("id_Заказ") REFERENCES "mydb"."Заказ" ("id_Заказ") ON DELETE NO ACTION ON UPDATE NO ACTION,
-        CONSTRAINT "fk_Треки_заказы_2" FOREIGN KEY ("Трек-номер") REFERENCES "mydb"."Трекинг посылки" ("Трек-номер") ON DELETE NO ACTION ON UPDATE NO ACTION
-    );
+-- CREATE TABLE IF NOT EXISTS
+--     "mydb"."Треки_заказы" (
+--         "Трек-номер" INT NOT NULL,
+--         "id_Заказ" INT NULL,
+--         PRIMARY KEY ("Трек-номер"),
+--         CONSTRAINT "fk_Треки_заказы_1" FOREIGN KEY ("id_Заказ") REFERENCES "mydb"."Заказ" ("id_Заказ") ON DELETE NO ACTION ON UPDATE NO ACTION,
+--         CONSTRAINT "fk_Треки_заказы_2" FOREIGN KEY ("Трек-номер") REFERENCES "mydb"."Трекинг посылки" ("Трек-номер") ON DELETE NO ACTION ON UPDATE NO ACTION
+--     );
