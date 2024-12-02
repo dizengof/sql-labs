@@ -21,6 +21,12 @@ END IF;
 
 IF NOT EXISTS (SELECT "id_Заказ" FROM mydb."Трекинг посылки" WHERE "id_Заказ" = order_num) THEN
     point_num := 0;
+    UPDATE 
+        mydb."Заказ"
+    SET 
+        "Код статуса заказа" = 4
+    WHERE
+        "id_Заказ" = order_num;
 ELSE 
     SELECT
         COUNT(*) INTO point_num
